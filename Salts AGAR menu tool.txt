@@ -1,0 +1,10 @@
+  var sCmds = newMenu("Salts AGAR Menu Tool", 
+       newArray("Salts AGAR 18K", "Arrange shape results AGAR", "Salts area fraction", "hape calculations"));
+
+  macro "Salts AGAR Menu Tool - C037T0b08AT4b08GT8b08ATcb08R" {
+      cmd = getArgument();
+      if (cmd=="Salts AGAR 18K") runMacro("Salts_AGAR_18K");
+      else if (cmd=="Organize shape results AGAR") runMacro("shape_results_arrangement_AGAR");
+      else if (cmd=="Salts area fraction") runMacro("salts_area_fraction");
+      else if (cmd=="Shape filter calculations") runMacro("salts_shape_filter");
+  }
