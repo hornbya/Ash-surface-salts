@@ -21,4 +21,5 @@ Final arranged Excel file is saved on the desktop as 'Rename me after writing is
 A menu tool can be installed: (1) Move all macros to the default macros folder (e.g. ...fiji-win64\Fiji.app\macros). (2) Move 'Salts AGAR menu tool.txt' to the toolset folder (...fiji-win64\Fiji.app\macros\toolsets). (3) Open ImageJ and the menu tool can be found by clicking on the >> button.
 
 Further details in the (forthcoming) publication:
-Casas, Hornby, Cimarelli and Dingwell 202x - "An imaging tool for rapid quantitative morphological characterization of soluble salts on ash particles"
+Casas, Hornby, Cimarelli and Dingwell 202x - "An imaging tool for rapid quantitative morphological characterization of soluble salts on ash particles".
+This project has received funding from the European Union's Horizon 2020 research and innovation programme
