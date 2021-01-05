@@ -1,0 +1,181 @@
+macro "Salt area fraction" {
+	
+	run("Clear Results"); 
+	if (nImages>0) 
+		close("*");
+	print("\\Clear");
+	setOption("BlackBackground", true);
+	run("Set Measurements...", "area limit display redirect=None decimal=3");
+	
+	Dialog.create("Single or batch");
+	Dialog.addCheckbox("Batch process a set of folders in a directory?", 0);
+	Dialog.addMessage("Leave unchecked to run on a single folder");
+	Dialog.show();
+	runtype=Dialog.getCheckbox();
+		
+	if (runtype==1) {
+		parent=getDirectory("Choose grandparent directory");
+		list=getFileList(parent);
+		Array.print(list);
+		}
+		else { 
+			parent=getDirectory("Choose folder to be processed");
+			list=newArray(parent);	
+		}
+	for (i = 0; i < list.length; i++) {
+		if (runtype==0) 
+			input=parent;
+		//	open(input);
+		else { 
+			dirName = list[i];
+			input=parent+File.separator+dirName;
+		}
+	
+	//input=getDirectory("Choose a directory containing images produced by the Salts AGAR macro");
+	//run("Clear Results");
+
+	//Dialog.create("Binary");
+	//Dialog.addCheckbox("Black background?", 1);
+	//Dialog.show();
+	//bb=Dialog.getCheckbox();
+	
+		path1=input+"-crop.tif";
+		path2=input+"-salts and xtals.tif";
+		path3=input+"-xtals.tif";
+		path4=input+"-salts.tif";
+		path5=input+"-results.csv";
+		path6=input+"-log.txt";
+		path7=input+"-croparea.tif";
+	
+		open(path3);
+		xtals=getImageID();
+		run("Set Scale...", "global");
+		open(path4);
+		salts=getImageID();
+		open(path7);
+		croparea=getImageID();
+		selectImage(croparea);
+		setAutoThreshold("Default dark");
+		setOption("BlackBackground", true);
+		run("Convert to Mask");
+		//run("Close");
+		//run("Make Binary");
+		run("Measure");
+		imagearea=getValue("Area");
+		print("image area = " + imagearea);
+		run("Clear Results");
+		selectImage(xtals);
+		setAutoThreshold("Default dark");
+		setOption("BlackBackground", true);
+		run("Convert to Mask");
+		//run("Close");
+		Overlay.remove;
+		//run("Make Binary");
+		wait(50);
+		run("Analyze Particles...", "size=5-Infinity pixel display");
+		sumxA=0;
+		for (k=0; k<nResults; k++) {
+			sumxA=sumxA+getResult("Area", k);
+		}
+		xtalarea=sumxA;
+		print("xtal area = " + xtalarea);
+		run("Clear Results");
+		selectImage(salts);
+		setAutoThreshold("Default dark");
+		setOption("BlackBackground", true);
+		run("Convert to Mask");
+		//run("Close");
+		//run("Make Binary");
+		wait(50);
+		run("Analyze Particles...", "size=5-Infinity pixel display");
+		sumsA=0;
+		for (k=0; k<nResults; k++) {
+			sumsA=sumsA+getResult("Area", k);
+		}
+		salts=sumsA;
+		print ("salts area = " + salts);
+		saltcanvas=(imagearea-xtalarea);
+		print("salt canvas area = " + saltcanvas);
+		saltspercent=((salts/saltcanvas)*100);
+		print ("Total salts coverage (%) = " + saltspercent);
+		run("Clear Results");
+		run("Make Binary");
+	 
+		//Dialog.create("Edges");
+		//Dialog.addCheckbox("Exclude particles on edges from single-particle measurements?", 0);
+		//Dialog.show();
+		//if (Dialog.getCheckbox()==1)
+		//if (bb==1)
+			run("Shape Filter", "area=0-Infinity area_convex_hull=0-Infinity perimeter=0-Infinity perimeter_convex_hull=0-Infinity feret_diameter=0-Infinity min._feret_diameter=0-Infinity max._inscr._circle_diameter=0-Infinity area_eq._circle_diameter=0-Infinity long_side_min._bounding_rect.=0-Infinity short_side_min._bounding_rect.=0-Infinity aspect_ratio=1-Infinity area_to_perimeter_ratio=0-Infinity circularity=0-Infinity elongation=0-1 convexity=0-1 solidity=0-1 num._of_holes=0-Infinity thinnes_ratio=0-1 contour_temperatur=0-1 orientation=0-180 fractal_box_dimension=0-2 option->box-sizes=2,3,4,6,8,12,16,32,64 add_to_manager draw_holes black_background fill_results_table");
+		//else {
+		//	run("Invert");
+		//	run("Shape Filter", "area=0-Infinity area_convex_hull=0-Infinity perimeter=0-Infinity perimeter_convex_hull=0-Infinity feret_diameter=0-Infinity min._feret_diameter=0-Infinity max._inscr._circle_diameter=0-Infinity area_eq._circle_diameter=0-Infinity long_side_min._bounding_rect.=0-Infinity short_side_min._bounding_rect.=0-Infinity aspect_ratio=1-Infinity area_to_perimeter_ratio=0-Infinity circularity=0-Infinity elongation=0-1 convexity=0-1 solidity=0-1 num._of_holes=0-Infinity thinnes_ratio=0-1 contour_temperatur=0-1 orientation=0-180 fractal_box_dimension=0-2 option->box-sizes=2,3,4,6,8,12,16,32,64 add_to_manager draw_holes fill_results_table");
+		//}
+		n = nResults;
+		area1 = newArray(n); 
+		length1 = newArray(n); 
+		area2 = newArray(n); 
+		length2 = newArray(n);
+		ff1 = newArray(n);
+		feret1 = newArray(n); 
+		minferet1 = newArray(n);
+		orientation1 = newArray(n);
+		roiLabel1 = newArray(n);
+		
+		for (j = 0; j<n; j++) {
+			orientation1[j] = getResult('Orientation', j); 
+			length1[j] = getResult('Peri.', j);
+			area1[j] = getResult('Area', j);
+			area2[j] = getResult('Area Conv. Hull', j);
+			length2[j] = getResult('Peri. Conv. Hull', j);
+			ff1[j] = getResult('Thinnes Rt.', j);
+			feret1[j] = getResult('Feret', j);
+			minferet1[j] = getResult('Min. Feret', j);
+		}
+		
+		run("Clear Results"); 
+		for (j = 0; j<n; j++) { 
+			setResult("Area", j, area1[j]);
+			setResult("Perim.", j, length1[j]); 
+			setResult("CH Area", j, area2[j]); 
+			setResult("CH Perim.", j, length2[j]); 
+			setResult("Solidity", j, area1[j]/area2[j]); 
+			setResult("Convexity", j, length2[j]/length1[j]); 
+			setResult("FormFactor", j, ff1[j]);
+			setResult("Circularity", j, length1[j]/(2*sqrt(PI*area1[j])));
+			setResult("Roundness", j, 4*area1[j]/(PI*pow(feret1[j],2)));
+			setResult("AR feret", j, minferet1[j]/feret1[j]);
+			setResult("Feret d", j, feret1[j]); 
+			setResult("MinFeret d", j, minferet1[j]);
+			setResult("Orientation", j, orientation1[j]);
+		} 
+			
+		updateResults();
+		selectWindow("Results");
+		saveAs("results", path5);
+		run("Summarize");
+		headings = split(String.getResultsHeadings);
+		print(String.getResultsHeadings);
+		for (b = nResults-4; b<nResults; b++) {
+			row=b;
+			line = "";
+			for (a=0; a<lengthOf(headings); a++)
+	    		line = line + getResult(headings[a],row) + " ";
+				print(line);
+		}
+		print ("Mean");
+		print("s.d.");
+		print("min");
+		print("max");
+		selectWindow("Log");
+		save(path6);
+		run("Set Scale...", "distance=0 known=0 unit=pixel");
+		close("*");
+		selectWindow("Log");
+		run("Close");
+		selectWindow("ROI Manager");
+		run("Close");
+		selectWindow("Results");
+		run("Close");
+	}
+}
