@@ -1,5 +1,5 @@
 # Surface salts analysis macro
-Segmentation and analysis of salts on glasses
+Segmentation and analysis of salts on glass particles
 
 Further details in the publication:
 Casas, A.S., Hornby, A., Poetsch, C. et al. A novel method for the quantitative morphometric characterization of soluble salts on volcanic ash. Bull Volcanol 84, 3 (2022). https://doi.org/10.1007/s00445-021-01519-3
