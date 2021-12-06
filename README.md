@@ -1,5 +1,8 @@
-# Ash-surface-salts
+# Surface salts analysis macro
 Segmentation and analysis of salts on glasses
+
+Further details in the publication:
+Casas, A.S., Hornby, A., Poetsch, C. et al. A novel method for the quantitative morphometric characterization of soluble salts on volcanic ash. Bull Volcanol 84, 3 (2022). https://doi.org/10.1007/s00445-021-01519-3
 
 ***********************************************************************
 AGAR salts analysis for high-magnification SEM images
@@ -20,6 +23,5 @@ Final arranged Excel file is saved on the desktop as 'Rename me after writing is
 
 A menu tool can be installed: (1) Move all macros to the default macros folder (e.g. ...fiji-win64\Fiji.app\macros). (2) Move 'Salts AGAR menu tool.txt' to the toolset folder (...fiji-win64\Fiji.app\macros\toolsets). (3) Open ImageJ and the menu tool can be found by clicking on the >> button.
 
-Further details in the (forthcoming) publication:
-Casas, Hornby, Cimarelli and Dingwell 202x - "An imaging tool for rapid quantitative morphological characterization of soluble salts on ash particles".
+
 This project has received funding from the European Union's Horizon 2020 research and innovation programme
